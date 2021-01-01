@@ -109,7 +109,7 @@ AC_CHECK_HEADERS(X11/Xaw/Form.h, , AC_MSG_ERROR("Cannot find Xaw header files"))
 AC_SEARCH_LIBS(XFillRectangle, X11, , AC_MSG_ERROR("Cannot find libX11"))
 AC_SEARCH_LIBS(XtVaSetValues, Xt, , AC_MSG_ERROR("Cannot find libXt"))
 AC_SEARCH_LIBS(XmuAddInitializer, Xmu, , AC_MSG_ERROR("Cannot find libXmu"))
-AC_SEARCH_LIBS(XawInitializeWidgetSet, Xaw, , AC_MSG_ERROR("Cannot find libXaw"))
+AC_SEARCH_LIBS(XawInitializeWidgetSet, Xaw3dxft, , AC_MSG_ERROR("Cannot find libXaw3dXft"))
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(vasprintf)

@@ -4255,7 +4255,7 @@ return XawInitializeWidgetSet ();
   return 0;
 }
 _ACEOF
-for ac_lib in '' Xaw; do
+for ac_lib in '' Xaw3dxft; do
   if test -z "$ac_lib"; then
     ac_res="none required"
   else
@@ -4286,7 +4286,7 @@ if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
 else
-  as_fn_error $? "\"Cannot find libXaw\"" "$LINENO" 5
+  as_fn_error $? "\"Cannot find libXaw3dXft\"" "$LINENO" 5
 fi
 
 
