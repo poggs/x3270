@@ -48,6 +48,7 @@
 #include <X11/Xaw/Scrollbar.h>
 #include <X11/Xaw/Form.h>
 #include <X11/Xaw/Label.h>
+#include <X11/Xft/Xft.h>
 #include "Husk.h"
 #include <X11/cursorfont.h>
 #include <X11/keysym.h>
@@ -348,6 +349,10 @@ bool           *funky_font = &nss.funky_font;
 int            *xtra_width = &nss.xtra_width;
 Font           *fid = &nss.fid;
 Dimension      *screen_height = &nss.screen_height;
+
+/* Xft globals. */
+XftDraw *xft_draw;
+XftFont *xft_font;
 
 /* Mouse-cursor state */
 enum mcursor_state { LOCKED, NORMAL, WAIT };
@@ -942,6 +947,12 @@ screen_reinit(unsigned cmask)
 
     XtRealizeWidget(toplevel);
     nss.window = XtWindow(nss.widget);
+    if (xappres.ffontname) {
+        /* Initialize Xft */
+        xft_draw = XftDrawCreate(display, nss.window, DefaultVisual(display, default_screen),
+                   DefaultColormap(display, default_screen));
+        xft_font = XftFontOpenName(display, default_screen, xappres.ffontname);
+    }
     set_mcursor();
 
     /* Reinitialize the active icon. */
@@ -2246,6 +2257,9 @@ resync_text(int baddr, int len, struct sp *buffer)
 static unsigned short
 font_index(ebc_t ebc, int d8_ix, bool upper)
 {
+    if(appres.ffontname)
+        return ebc;
+
     ucs4_t ucs4;
     int d;
 
@@ -2359,6 +2373,30 @@ apl_to_ldisplay(unsigned char c)
 static XChar2b
 linedraw_to_udisplay(int d8_ix, unsigned char c)
 {
+    /*
+    * Render freetype text onto the X display.
+    */
+    void xft_draw_string(GC gc, XTextItem16 *text_items, int x, int y)
+    {
+                XGCValues xgc_values;
+                /* Get graphics context's foreground color */
+                XGetGCValues(display, gc, GCForeground, &xgc_values);
+                XRenderColor xr_color = {0x00ff, 0x00ff, 0x00ff, 0xffff};
+                /* Convert GC color to XRenderColor */
+                memcpy((char*)&xr_color.red + 1, (char*)&xgc_values.foreground + 2, 1);
+                memcpy((char*)&xr_color.green + 1, (char*)&xgc_values.foreground + 1, 1);
+                memcpy((char*)&xr_color.blue + 1, (char*)&xgc_values.foreground + 0, 1);
+                XftColor xft_color;
+                /* Allocate XftColor from XRenderColor */
+                XftColorAllocValue(display, DefaultVisual(display, default_screen),
+                    DefaultColormap(display, default_screen), &xr_color, &xft_color);
+                XftDrawString16(xft_draw, &xft_color, xft_font, x, y,
+                    (XftChar16*)text_items->chars, text_items->nchars);
+                /* Free XftColor */
+                XftColorFree(display, DefaultVisual(display, default_screen),
+                    DefaultColormap(display, default_screen), &xft_color);
+            }
+
     XChar2b x;
     int d;
 
