@@ -4066,24 +4066,24 @@ if test "x$ac_cv_header_freetype2_ft2build_h" = xyes; then :
 _ACEOF
 
 else
-  as_fn_error $? "\"Cannot find freetype2 header files\"" "$LINENO" 5
+  as_fn_error $? "\"Cannot find freetype2 in header files\"" "$LINENO" 5
 fi
 
 done
 
-for ac_header in freetype/ft2build.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "freetype/ft2build.h" "ac_cv_header_freetype_ft2build_h" "$ac_includes_default"
-if test "x$ac_cv_header_freetype_ft2build_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_FREETYPE_FT2BUILD_H 1
-_ACEOF
-
-else
-  as_fn_error $? "\"Cannot find freetype2 header files\"" "$LINENO" 5
-fi
-
-done
+# for ac_header in freetype/ft2build.h
+# do :
+#   ac_fn_c_check_header_mongrel "$LINENO" "freetype/ft2build.h" "ac_cv_header_freetype_ft2build_h" "$ac_includes_default"
+# if test "x$ac_cv_header_freetype_ft2build_h" = xyes; then :
+#   cat >>confdefs.h <<_ACEOF
+# #define HAVE_FREETYPE_FT2BUILD_H 1
+# _ACEOF
+#
+# else
+#   as_fn_error $? "\"Cannot find freetype header files\"" "$LINENO" 5
+# fi
+#
+# done
 
 for ac_header in X11/Xft/Xft.h
 do :
